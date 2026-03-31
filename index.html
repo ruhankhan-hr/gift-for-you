@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Love</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background-color: #ffeff2;
+            font-family: 'Poppins', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden;
+            text-align: center;
+        }
+
+        /* Floating Hearts Background */
+        .heart-bg {
+            position: absolute; color: #ff4d6d;
+            font-size: 20px; animation: move 4s linear infinite;
+            z-index: 1; opacity: 0.6;
+        }
+        @keyframes move {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        /* Main Card */
+        .container {
+            background: white; padding: 25px;
+            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 10; width: 85%; max-width: 350px;
+        }
+
+        .main-img {
+            width: 100%; border-radius: 15px;
+            margin-bottom: 15px; border: 3px solid #ff4d6d;
+        }
+
+        h1 { color: #ff4d6d; font-size: 22px; margin: 10px 0; }
+        
+        .scan-btn {
+            background: #ff4d6d; color: white; border: none;
+            padding: 12px 25px; border-radius: 25px;
+            font-size: 16px; cursor: pointer; transition: 0.3s;
+            margin-top: 10px; font-weight: bold;
+        }
+
+        /* Birthday Wish Animation */
+        #wish-box { display: none; margin-top: 20px; animation: fadeIn 1s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        #random-wish { font-weight: bold; color: #333; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="https://via.placeholder.com/300x300?text=Your+Photo+Here" id="birthday-pic" class="main-img" alt="Birthday Girl/Boy">
+        
+        <h1>Happy Birthday, <span id="name">PRIYO!</span> ❤️</h1>
+        
+        <button class="scan-btn" onclick="showSurprise()">SCAN SURPRISE</button>
+
+        <div id="wish-box">
+            <p id="random-wish"></p>
+            <p>🎉🎂🎈</p>
+        </div>
+    </div>
+
+    <script>
+        // Floating Hearts logic
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.classList.add('heart-bg');
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+        setInterval(createHeart, 300);
+
+        // Name ar Photo update korar jonno (Optionally tumi change korte paro)
+        const name = "Tomar Name"; // Ekhane name change koro
+        const photoUrl = "chobi_link_ekhane"; // Tomar chobir link daw
+
+        const wishes = [
+            "You are the best thing that ever happened to me! 🌹",
+            "May your day be as sweet as your smile! 😊",
+            "I love you more than words can say. Happy Birthday! ❤️",
+            "Always stay happy and keep shining! ✨",
+            "Cheers to another year of amazing memories! 🥂"
+        ];
+
+        function showSurprise() {
+            const wishBox = document.getElementById('wish-box');
+            const wishText = document.getElementById('random-wish');
+            
+            wishBox.style.display = "block";
+            const random = wishes[Math.floor(Math.random() * wishes.length)];
+            wishText.innerText = random;
+
+            // Optional: Surprise sound add korte chaila ekhane code dewa jay
+        }
+    </script>
+</body>
+</html>
