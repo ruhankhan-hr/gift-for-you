@@ -3,18 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Love</title>
+    <title>Biometric Surprise</title>
     <style>
         body {
             margin: 0; padding: 0;
-            background-color: #ffeff2;
+            background-color: #0a0a0a; /* Dark background for fingerprint */
             font-family: 'Poppins', sans-serif;
             display: flex; justify-content: center; align-items: center;
             height: 100vh; overflow: hidden;
-            text-align: center;
+            transition: background 1s ease;
         }
 
-        /* Floating Hearts Background */
+        /* Fingerprint Container */
+        #fingerprint-container {
+            text-align: center;
+            z-index: 100;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .fingerprint-icon {
+            width: 100px;
+            height: 100px;
+            fill: #555;
+            transition: 0.3s;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+
+        /* Scanning Animation */
+        .scanning .fingerprint-icon {
+            fill: #ff4d6d;
+            animation: none;
+        }
+
+        .scan-bar {
+            position: absolute;
+            width: 100px; height: 2px;
+            background: #ff4d6d;
+            box-shadow: 0 0 15px #ff4d6d;
+            top: 0; display: none;
+        }
+
+        /* Main Content (Hidden Initially) */
+        #main-content {
+            display: none;
+            z-index: 10; width: 85%; max-width: 350px;
+            background: white; padding: 25px;
+            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            animation: popUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popUp { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .main-img { width: 100%; border-radius: 15px; border: 3px solid #ff4d6d; margin-bottom: 15px; }
+        h1 { color: #ff4d6d; font-size: 24px; margin: 10px 0; }
+        #wish-text { font-size: 18px; color: #333; font-weight: bold; }
+
+        /* Floating Hearts */
         .heart-bg {
             position: absolute; color: #ff4d6d;
             font-size: 20px; animation: move 4s linear infinite;
@@ -25,51 +77,72 @@
             100% { transform: translateY(-10vh) rotate(360deg); }
         }
 
-        /* Main Card */
-        .container {
-            background: white; padding: 25px;
-            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            z-index: 10; width: 85%; max-width: 350px;
-        }
-
-        .main-img {
-            width: 100%; border-radius: 15px;
-            margin-bottom: 15px; border: 3px solid #ff4d6d;
-        }
-
-        h1 { color: #ff4d6d; font-size: 22px; margin: 10px 0; }
-        
-        .scan-btn {
-            background: #ff4d6d; color: white; border: none;
-            padding: 12px 25px; border-radius: 25px;
-            font-size: 16px; cursor: pointer; transition: 0.3s;
-            margin-top: 10px; font-weight: bold;
-        }
-
-        /* Birthday Wish Animation */
-        #wish-box { display: none; margin-top: 20px; animation: fadeIn 1s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        #random-wish { font-weight: bold; color: #333; font-style: italic; }
+        p.instruction { color: #888; font-size: 14px; margin-top: 15px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://via.placeholder.com/300x300?text=Your+Photo+Here" id="birthday-pic" class="main-img" alt="Birthday Girl/Boy">
-        
-        <h1>Happy Birthday, <span id="name">PRIYO!</span> ❤️</h1>
-        
-        <button class="scan-btn" onclick="showSurprise()">SCAN SURPRISE</button>
+    <div id="fingerprint-container" onmousedown="startScan()" onmouseup="stopScan()" ontouchstart="startScan()" ontouchend="stopScan()">
+        <svg class="fingerprint-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.67-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.56.24.13.33.43.21.67-.09.15-.24.24-.44.24zm3.04 3.03c-.11 0-.22-.03-.33-.1-.08-.05-3.32-2.16-8.51-2.16-5.2 0-8.43 2.11-8.51 2.16-.24.13-.54.06-.68-.18-.14-.24-.06-.54.18-.68.17-.1 3.61-2.3 9.01-2.3 5.4 0 8.84 2.2 9.01 2.3.24.14.32.44.18.68-.09.16-.25.28-.49.28zm-3.04 14c-.11 0-.21-.03-.31-.1-.13-.08-2.61-1.63-5.51-1.63-2.89 0-5.38 1.55-5.51 1.63-.24.13-.55.06-.69-.17-.14-.24-.06-.54.17-.68.3-.19 3.01-1.78 6.03-1.78 3.02 0 5.73 1.59 6.03 1.78.24.14.32.44.18.68-.09.17-.26.27-.4.27z"/>
+            <path d="M12 22c-5.52 0-10-4.48-10-10S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm0-18c-4.41 0-8 3.59-8 8s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8z"/>
+        </svg>
+        <p class="instruction" id="scan-text">HOLD TO UNLOCK SURPRISE</p>
+    </div>
 
-        <div id="wish-box">
-            <p id="random-wish"></p>
-            <p>🎉🎂🎈</p>
-        </div>
+    <div id="main-content">
+        <img src="YOUR_PHOTO_HERE.jpg" id="birthday-pic" class="main-img" alt="Birthday Photo">
+        <h1>Happy Birthday, <span id="name">PRIYO!</span> ❤️</h1>
+        <p id="wish-text"></p>
+        <p style="font-size: 25px;">🎂✨🎁</p>
     </div>
 
     <script>
-        // Floating Hearts logic
+        let scanTimer;
+        const container = document.getElementById('fingerprint-container');
+        const scanText = document.getElementById('scan-text');
+
+        function startScan() {
+            container.classList.add('scanning');
+            scanText.innerText = "VERIFYING...";
+            scanText.style.color = "#ff4d6d";
+            
+            // ২ সেকেন্ড ধরে রাখলে আনলক হবে
+            scanTimer = setTimeout(() => {
+                unlockSurprise();
+            }, 2000);
+        }
+
+        function stopScan() {
+            clearTimeout(scanTimer);
+            if(document.getElementById('main-content').style.display !== 'block') {
+                container.classList.remove('scanning');
+                scanText.innerText = "HOLD TO UNLOCK SURPRISE";
+                scanText.style.color = "#888";
+            }
+        }
+
+        function unlockSurprise() {
+            container.style.display = 'none';
+            document.body.style.backgroundColor = '#ffeff2';
+            
+            const mainContent = document.getElementById('main-content');
+            mainContent.style.display = 'block';
+
+            // হার্ট এনিমেশন শুরু
+            setInterval(createHeart, 300);
+
+            // র‍্যান্ডম উইশ
+            const wishes = [
+                "You are the most special person! ❤️",
+                "Happy Birthday! Stay blessed always! 🌹",
+                "Wishing you a year full of joy! 🥂",
+                "May your dreams come true! 🎈",
+                "Enjoy your special day to the fullest! ✨"
+            ];
+            document.getElementById('wish-text').innerText = wishes[Math.floor(Math.random() * wishes.length)];
+        }
+
         function createHeart() {
             const heart = document.createElement('div');
             heart.innerHTML = '❤️';
@@ -78,30 +151,6 @@
             heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 4000);
-        }
-        setInterval(createHeart, 300);
-
-        // Name ar Photo update korar jonno (Optionally tumi change korte paro)
-        const name = "Tomar Name"; // Ekhane name change koro
-        const photoUrl = "chobi_link_ekhane"; // Tomar chobir link daw
-
-        const wishes = [
-            "You are the best thing that ever happened to me! 🌹",
-            "May your day be as sweet as your smile! 😊",
-            "I love you more than words can say. Happy Birthday! ❤️",
-            "Always stay happy and keep shining! ✨",
-            "Cheers to another year of amazing memories! 🥂"
-        ];
-
-        function showSurprise() {
-            const wishBox = document.getElementById('wish-box');
-            const wishText = document.getElementById('random-wish');
-            
-            wishBox.style.display = "block";
-            const random = wishes[Math.floor(Math.random() * wishes.length)];
-            wishText.innerText = random;
-
-            // Optional: Surprise sound add korte chaila ekhane code dewa jay
         }
     </script>
 </body>
