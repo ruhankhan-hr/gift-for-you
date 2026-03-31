@@ -77,7 +77,7 @@
     <div id="main-content">
         <img src="1774963235042.jpg" id="birthday-pic" class="main-img" alt="Surprise">
         <h1 id="title-text">Happy Birthday, Jorda! ❤️</h1>
-        <p id="wish-text">Loading special messages...</p>
+        <div id="wish-text">Loading special messages...</div>
         <p style="font-size: 25px; margin-top: 10px;">🎂✨🎁</p>
     </div>
 
@@ -85,9 +85,9 @@
         const messages = [
             "Happy birthday Jorda 🥳!",
             "Duya kori allah jeno tomar shob moner asha puron kore! 😇",
-            "Shobshomoy hashikhushi thako! 🥂"",
+            "Shobshomoy hashikhushi thako! 🥂",
             "Enjoy your day happily",
-            "tumi shobshomoy amar priyo chila poroborti teo thakba.once again happy birthday jafrin ☺️"
+            "tumi shobshomoy amar priyo chila poroborti teo thakba.once again happy birthday jafrin ☺️",
             "lastly 😶‍🌫️i love you 😶‍🌫️!"
         ];
         let msgIndex = 0;
@@ -96,17 +96,20 @@
             const hasScanned = localStorage.getItem("scannedBefore");
 
             if (hasScanned) {
-                showSurprise(true);
+                // যদি আগে স্ক্যান করে থাকে, তবে টাইটেল মুছে ফেলো
+                document.getElementById('title-text').style.display = 'none';
+                showSurprise();
             } else {
+                // প্রথমবার হলে স্ক্যানিং এনিমেশন দেখাও
                 document.getElementById('scan-area').style.display = 'block';
                 setTimeout(() => {
                     localStorage.setItem("scannedBefore", "true");
-                    showSurprise(false);
+                    showSurprise();
                 }, 3500); 
             }
         }
 
-        function showSurprise(immediate) {
+        function showSurprise() {
             document.getElementById('scan-area').style.display = 'none';
             document.body.style.backgroundColor = '#ffeff2';
             const mainContent = document.getElementById('main-content');
@@ -120,12 +123,9 @@
             if (msgIndex < messages.length) {
                 document.getElementById('wish-text').innerText = messages[msgIndex];
                 msgIndex++;
-                // প্রতি ৩ সেকেন্ড পর পর মেসেজ বদলাবে
                 setTimeout(displayNextMessage, 3000);
             } else {
-                // সব মেসেজ শেষ হলে এটি দেখাবে
                 document.getElementById('wish-text').innerHTML = "<span style='color:#ff4d6d; font-size:22px;'>Thank You ❤️</span>";
-                // এখানে আর কোনো রিপিট ফাংশন কল করা হয়নি, তাই এখানেই থেমে যাবে।
             }
         }
 
